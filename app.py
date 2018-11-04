@@ -21,7 +21,7 @@ class WorkerSchema(ma.Schema):
 class ListingSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('name','business_id', 'date_start', 'date_end', 'category', 'location', 'price', 'description', 'skills')
+        fields = ('job_title','company_name', 'start_time', 'end_time', 'date', 'status', 'wage', 'photo', 'location','description','skills','applied')
 
 class BusinessSchema(ma.Schema):
     class Meta:
@@ -79,23 +79,26 @@ def get_workers():
 #LISTING
 @app.route("/listing", methods=["POST"])
 def add_listing():
-    name = request.json['name']
-    business_id = request.json['business_id']
-    date_start = datetime.strptime(request.json['date_start'], '%b %d %Y %I:%M%p')
-    date_end = datetime.strptime(request.json['date_end'], '%b %d %Y %I:%M%p')
-    category = request.json['category']
+    job_title = request.json['job_title']
+    company_name = request.json['company_name']
+    start_time = request.json['start_time']
+    end_time = request.json['end_time']
+    date = request.json['date']
+    status = request.json['status']
+    wage = request.json['wage']
+    photo = request.json['photo']
     location = request.json['location']
-    price = request.json['price']
     description = request.json['description']
     skills = request.json['skills']
+    applied = request.json['applied']
     
-    new_listing = models.Listing(name,business_id, date_start, date_end, category, location, price, description, skills)
+    new_listing = models.Listing(job_title, company_name, start_time, end_time, date, status, wage, photo, location, description, skills, applied)
 
     db.session.add(new_listing)
     db.session.commit()
 
     client = nexmo.Client(key='78ca5126', secret='6hnzpSo1P0U6vPvt')
-    client.send_message({'from': '17402240276', 'to': '14087310723', 'text': 'New Listing near you in {0} for the wage of: ${1}'.format(location,price)})
+    client.send_message({'from': '17402240276', 'to': '14087310723', 'text': 'New Listing near you in {0} for the wage of: ${1}'.format(location,wage)})
 
     return "201 Created Listing"
 

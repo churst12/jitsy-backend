@@ -45,26 +45,32 @@ class Review(db.Model):
 class Listing(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(), nullable=True)
-    business_id = db.Column(db.Integer, nullable=True)
-    date_start = db.Column(db.DateTime(), nullable=True)
-    date_end = db.Column(db.DateTime(), nullable=True)
-    category = db.Column(db.String(), nullable=True)
+    job_title = db.Column(db.String(), nullable=True)
+    company_name = db.Column(db.String(), nullable=True)
+    start_time = db.Column(db.String(), nullable=True)
+    end_time = db.Column(db.String(), nullable=True)
+    date = db.Column(db.String(), nullable=True)
+    status = db.Column(db.String(), nullable=True)
+    wage = db.Column(db.Integer, nullable=True)
+    photo = db.Column(db.String(), nullable=True)
     location = db.Column(db.String(), nullable=True)
-    price = db.Column(db.Integer, nullable=True)
     description = db.Column(db.String(), nullable=True)
     skills = db.Column(db.String(), nullable=True)
+    applied = db.Column(db.Boolean(), nullable=True)
 
-    def __init__(self, name, business_id, date_start, date_end, category, location, price, description, skills):
-        self.name = name
-        self.business_id = business_id
-        self.date_start = date_start
-        self.date_end = date_end
-        self.category = category
+    def __init__(self, job_title, company_name, start_time, end_time, date, status, wage, photo, location, description, skills, applied):
+        self.job_title = job_title
+        self.company_name = company_name
+        self.start_time = start_time
+        self.end_time = end_time
+        self.date = date
+        self.status = status
+        self.wage = wage
+        self.photo = photo
         self.location = location
-        self.price = price
         self.description = description
         self.skills = skills
+        self.applied = applied
 
 
 
@@ -76,7 +82,7 @@ class Worker(db.Model):
     phone_number = db.Column(db.String(), nullable=True)
     experiences = db.Column(db.String(), nullable=True)
     skills = db.Column(db.String(), nullable=True)
-    location = db.Column(db.String(), )
+    location = db.Column(db.String(), nullable=True)
     profile_img = db.Column(db.String())
     bio = db.Column(db.String(), nullable=True)
     links = db.Column(db.String(), nullable=True)
