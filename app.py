@@ -8,8 +8,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 
-db.session.add(Dataentry("Testing123123123"))
-db.session.commit()
+
 class Dataentry(db.Model):
     __tablename__ = "testing123"
     id = db.Column(db.Integer, primary_key=True)
@@ -17,7 +16,7 @@ class Dataentry(db.Model):
 
     def __init__ (self, mydata):
         self.mydata = mydata
-        
+
 db.session.add(Dataentry("Testing123123123"))
 db.session.commit()
 
