@@ -11,7 +11,7 @@ from models import User, Listing
 
 @app.route('/')
 def home():
-    return "fuck you"
+    return "jitsy"
 
 
 if __name__ == '__main__':
