@@ -1,6 +1,7 @@
 
 from flask import Flask, request, jsonify
 from flask_marshmallow import Marshmallow
+from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -17,13 +18,21 @@ class WorkerSchema(ma.Schema):
         # Fields to expose
         fields = ('name', 'email', 'phone_number', 'experiences','skills','location','profile_img','bio','links','certifications')
 
+class ListingSchema(ma.Schema):
+    class Meta:
+        # Fields to expose
+        fields = ('business_id', 'date_start', 'date_end', 'category', 'location', 'price', 'description', 'skills')
+
 
 
 worker_schema = WorkerSchema()
 workers_schema = WorkerSchema(many=True)
 
+listing_schema = ListingSchema()
+listings_schema = ListingSchema(many=True)
 
-# endpoint to create new user
+
+#WORKER
 @app.route("/worker", methods=["POST"])
 def add_worker():
     email = request.json['email']
@@ -42,12 +51,38 @@ def add_worker():
     db.session.add(new_worker)
     db.session.commit()
 
-    return "201 Created"
+    return "201 Created Worker"
 @app.route('/worker', methods=["GET"])
 def get_workers():
     all_workers = models.Worker.query.all()
     result = workers_schema.dump(all_workers)
     return jsonify(result.data)
+
+#BUSINESS
+@app.route("/listing", methods=["POST"])
+def add_listing():
+    business_id = request.json['business_id']
+    date_start = datetime.strptime(request.json['date_start'], '%b %d %Y %I:%M%p')
+    date_end = datetime.strptime(request.json['date_end'], '%b %d %Y %I:%M%p')
+    category = request.json['category']
+    location = request.json['location']
+    price = request.json['price']
+    description = request.json['description']
+    skills = request.json['skills']
+    
+    new_listing = models.Listing(business_id, date_start, date_end, category, location, price, description, skills)
+
+    db.session.add(new_listing)
+    db.session.commit()
+
+    return "201 Created Listing"
+
+@app.route('/listing', methods=["GET"])
+def get_listings():
+    all_listings = models.Listing.query.all()
+    result = listings_schema.dump(all_listings)
+    return jsonify(result.data)
+
 @app.route('/')
 def home():
     return "jitsy"
