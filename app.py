@@ -21,7 +21,7 @@ class WorkerSchema(ma.Schema):
 class ListingSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('business_id', 'date_start', 'date_end', 'category', 'location', 'price', 'description', 'skills')
+        fields = ('name','business_id', 'date_start', 'date_end', 'category', 'location', 'price', 'description', 'skills')
 
 class BusinessSchema(ma.Schema):
     class Meta:
@@ -79,6 +79,7 @@ def get_workers():
 #LISTING
 @app.route("/listing", methods=["POST"])
 def add_listing():
+    name = request.json['name']
     business_id = request.json['business_id']
     date_start = datetime.strptime(request.json['date_start'], '%b %d %Y %I:%M%p')
     date_end = datetime.strptime(request.json['date_end'], '%b %d %Y %I:%M%p')
@@ -88,7 +89,7 @@ def add_listing():
     description = request.json['description']
     skills = request.json['skills']
     
-    new_listing = models.Listing(business_id, date_start, date_end, category, location, price, description, skills)
+    new_listing = models.Listing(name,business_id, date_start, date_end, category, location, price, description, skills)
 
     db.session.add(new_listing)
     db.session.commit()

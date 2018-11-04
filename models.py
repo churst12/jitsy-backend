@@ -45,6 +45,7 @@ class Review(db.Model):
 class Listing(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), nullable=True)
     business_id = db.Column(db.Integer, nullable=True)
     date_start = db.Column(db.DateTime(), nullable=True)
     date_end = db.Column(db.DateTime(), nullable=True)
@@ -54,7 +55,8 @@ class Listing(db.Model):
     description = db.Column(db.String(), nullable=True)
     skills = db.Column(db.String(), nullable=True)
 
-    def __init__(self, business_id, date_start, date_end, category, location, price, description, skills):
+    def __init__(self, name, business_id, date_start, date_end, category, location, price, description, skills):
+        self.name = name
         self.business_id = business_id
         self.date_start = date_start
         self.date_end = date_end
