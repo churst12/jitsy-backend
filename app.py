@@ -28,6 +28,11 @@ class BusinessSchema(ma.Schema):
         # Fields to expose
         fields = ('location','name', 'bio','cover_img','profile_img','other_img','category','email', 'phone_number')
 
+class ReviewSchema(ma.Schema):
+    class Meta:
+        # Fields to expose
+        fields = ('business_id', 'worker_id', 'date', 'content', 'score', 'listing_id', 'reviewer_type')
+
 
 
 worker_schema = WorkerSchema()
@@ -38,6 +43,9 @@ listings_schema = ListingSchema(many=True)
 
 business_schema = BusinessSchema()
 businesses_schema = BusinessSchema(many=True)
+
+review_schema = ReviewSchema()
+reviews_schema = ReviewSchema(many=True)
 
 ######
 #WORKER
@@ -121,7 +129,30 @@ def get_businesses():
     return jsonify(result.data)
 ##########
 
+#REVIEWS
+@app.route("/review", methods=["POST"])
+def add_review():
+    business_id = request.json['business_id']
+    worker_id = request.json['worker_id']
+    date = datetime.strptime(request.json['date'], '%b %d %Y %I:%M%p')
+    content = request.json['content']
+    score = request.json['score']
+    listing_id = request.json['listing_id']
+    reviewer_type = request.json['reviewer_type']
+    
+    new_review = models.Review(business_id, worker_id, date, content, score, listing_id, reviewer_type)
 
+    db.session.add(new_review)
+    db.session.commit()
+
+    return "201 Created Review"
+
+@app.route('/review', methods=["GET"])
+def get_reviews():
+    all_reviews = models.Review.query.all()
+    result = reviews_schema.dump(all_reviews)
+    return jsonify(result.data)
+##########
 
 @app.route('/')
 def home():
