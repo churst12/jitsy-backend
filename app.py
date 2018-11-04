@@ -25,10 +25,11 @@ users_schema = UserSchema(many=True)
 # endpoint to create new user
 @app.route("/user", methods=["POST"])
 def add_user():
-    username = request.json['nickname']
     email = request.json['email']
+    nickname = request.json['nickname']
     
-    new_user = models.User(username, email)
+    
+    new_user = models.User(nickname, email)
 
     db.session.add(new_user)
     db.session.commit()
