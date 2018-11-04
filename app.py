@@ -1,63 +1,42 @@
-from flask import Flask
+from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/jitsy'
+import sys
+import json
+from flask_heroku import Heroku
+app = Flask( __name__ )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+heroku = Heroku(app)
 db = SQLAlchemy(app)
 
-
-class User(db.Model):
+db.session.add(Dataentry("Testing123123123"))
+db.session.commit()
+class Dataentry(db.Model):
+    __tablename__ = "testing123"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    mydata = db.Column(db.Text())
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+    def __init__ (self, mydata):
+        self.mydata = mydata
 
-class Listing(db.Model):
+@app.route("/submit", methods=["POST"])
+def post_to_db():
+    indata = Dataentry(data, "YOLO")
+    data = copy(indata. __dict__ )
+    del data["_sa_instance_state"]
+    try:
+        db.session.add(indata)
+        db.session.commit()
+    except Exception as e:
+        print("\n FAILED entry: {}\n".format(json.dumps(data)))
+        print(e)
+        sys.stdout.flush()
+    return 'Success! To enter more data, <a href="{}">click here!</a>'.format(url_for("enter_data"))
 
-    id = db.Column(db.Integer, primary_key=True)
-    business_id = db.Column(db.Integer)
-    date_start = db.Column(db.DateTime())
-    date_end = db.Column(db.DateTime())
-    category = db.Column(db.String())
-    location = db.Column(db.String())
-    price = db.Column(db.Integer)
-    description = db.Column(db.String())
-    skills = db.Column(db.String())
+@app.route("/")
+def enter_data(): 
+    return render_template("dataentry.html")
 
-    def __repr__(self):
-        return '<id {}>'.format(self.id)
 
-class Test(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    business_id = db.Column(db.Integer)
-    date_start = db.Column(db.DateTime())
-    date_end = db.Column(db.DateTime())
-    category = db.Column(db.String())
-    location = db.Column(db.String())
-    price = db.Column(db.Integer)
-    description = db.Column(db.String())
-    skills = db.Column(db.String())
-
-    def __repr__(self):
-        return '<id {}>'.format(self.id)
-
-@app.route('/todo/api/v1.0/tasks', methods=['GET'])
-def get_tasks():
-    return jsonify({'tasks': tasks})
-
-@app.route('/<name>')
-def hello_name(name):
-    return "Hello {}!".format(name)
-
-@app.route('/display')
-def view_listings():
-	from models import Listing
-	listings = Listing.query.all()
-	return listings
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == ' __main__':
+    #app.debug = True
+    app.run()
