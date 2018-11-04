@@ -1,5 +1,4 @@
 from app import db
-from manage import db,app
 
 class Listing(db.Model):
 
@@ -17,11 +16,13 @@ class Listing(db.Model):
         return '<id {}>'.format(self.id)
 
 
+
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    nickname = db.Column(db.String(64), index=True, unique=True)
+    nickname = db.Column(db.String(64) )
     email = db.Column(db.String(120), index=True, unique=True)
 
-    def __repr__(self):
-        return '<User %r>' % (self.nickname)
+    def __init__(self, nickname, email):
+        self.nickname = nickname
+        self.email = email
