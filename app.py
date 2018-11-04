@@ -23,6 +23,11 @@ class ListingSchema(ma.Schema):
         # Fields to expose
         fields = ('business_id', 'date_start', 'date_end', 'category', 'location', 'price', 'description', 'skills')
 
+class BusinessSchema(ma.Schema):
+    class Meta:
+        # Fields to expose
+        fields = ('location','name', 'bio','cover_img','profile_img','other_img','category','email', 'phone_number')
+
 
 
 worker_schema = WorkerSchema()
@@ -31,7 +36,10 @@ workers_schema = WorkerSchema(many=True)
 listing_schema = ListingSchema()
 listings_schema = ListingSchema(many=True)
 
+business_schema = BusinessSchema()
+businesses_schema = BusinessSchema(many=True)
 
+######
 #WORKER
 @app.route("/worker", methods=["POST"])
 def add_worker():
@@ -57,8 +65,10 @@ def get_workers():
     all_workers = models.Worker.query.all()
     result = workers_schema.dump(all_workers)
     return jsonify(result.data)
+#######
 
-#BUSINESS
+#######
+#LISTING
 @app.route("/listing", methods=["POST"])
 def add_listing():
     business_id = request.json['business_id']
@@ -82,6 +92,36 @@ def get_listings():
     all_listings = models.Listing.query.all()
     result = listings_schema.dump(all_listings)
     return jsonify(result.data)
+##########
+
+#BUSINESS
+@app.route("/business", methods=["POST"])
+def add_business():
+    location = request.json['location']
+    name = request.json['name']
+    bio = request.json['bio']
+    cover_img = request.json['cover_img']
+    profile_img = request.json['profile_img']
+    other_img = request.json['other_img']
+    category = request.json['category']
+    email = request.json['email']
+    phone_number = request.json['phone_number']
+    
+    new_business = models.Business(location,name, bio,cover_img,profile_img,other_img,category,email, phone_number)
+
+    db.session.add(new_business)
+    db.session.commit()
+
+    return "201 Created Business"
+
+@app.route('/business', methods=["GET"])
+def get_businesses():
+    all_businesses = models.Business.query.all()
+    result = businesses_schema.dump(all_businesses)
+    return jsonify(result.data)
+##########
+
+
 
 @app.route('/')
 def home():
