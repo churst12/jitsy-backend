@@ -1,44 +1,28 @@
-from flask import Flask, render_template, url_for
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import sys
-import json
-from flask_heroku import Heroku
-app = Flask( __name__ )
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-heroku = Heroku(app)
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///jitsy.db'
 db = SQLAlchemy(app)
 
+from models import User, Listing
 
-class Dataentry(db.Model):
-    __tablename__ = "testing123"
-    id = db.Column(db.Integer, primary_key=True)
-    mydata = db.Column(db.Text())
+@app.route('/add/')
+def webhook():
+    name = "ram"
+    email = "ram@ram.com"
+    u = User(id = id, nickname = name, email = email)
+    print("user created", u)
+    db.session.add(u)
+    db.session.commit()
+    return "user created"
 
-    def __init__ (self, mydata):
-        self.mydata = mydata
+@app.route('/delete/')
+def delete():
+    u = User.query.get(i)
+    db.session.delete(u)
+    db.session.commit()
+    return "user deleted"
 
-#db.session.add(Dataentry("Testing123123123"))
-#db.session.commit()
-
-@app.route("/submit", methods=["POST"])
-def post_to_db():
-    indata = Dataentry(data, "YOLO")
-    data = copy(indata. __dict__ )
-    del data["_sa_instance_state"]
-    try:
-        db.session.add(indata)
-        db.session.commit()
-    except Exception as e:
-        print("\n FAILED entry: {}\n".format(json.dumps(data)))
-        print(e)
-        sys.stdout.flush()
-    return 'Success! To enter more data, <a href="{}">click here!</a>'.format(url_for("enter_data"))
-
-@app.route("/")
-def enter_data(): 
-    return render_template("dataentry.html")
-
-
-if __name__ == ' __main__':
-    #app.debug = True
+if __name__ == '__main__':
     app.run()
