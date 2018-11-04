@@ -17,6 +17,9 @@ class Dataentry(db.Model):
 
     def __init__ (self, mydata):
         self.mydata = mydata
+        
+db.session.add(Dataentry("Testing123123123"))
+db.session.commit()
 
 @app.route("/submit", methods=["POST"])
 def post_to_db():
