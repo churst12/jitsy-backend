@@ -23,7 +23,7 @@ def add_user():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify(new_user)
+    return "201 Created"
 
 @app.route('/')
 def home():
