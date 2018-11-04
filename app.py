@@ -12,3 +12,7 @@ from models import User, Listing
 @app.route('/')
 def home():
     return "fuck you"
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
