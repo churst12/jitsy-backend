@@ -12,6 +12,16 @@ ma = Marshmallow(app)
 
 import models
 
+class UserSchema(ma.Schema):
+    class Meta:
+        # Fields to expose
+        fields = ('nickname', 'email')
+
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+
+
 # endpoint to create new user
 @app.route("/user", methods=["POST"])
 def add_user():
@@ -24,7 +34,11 @@ def add_user():
     db.session.commit()
 
     return "201 Created"
-
+@app.route('/user', methods=["GET"])
+def get_users():
+    all_users = models.User.query.all()
+    result = users_schema.dump(all_users)
+    return jsonify(result.data)
 @app.route('/')
 def home():
     return "jitsy"
