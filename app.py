@@ -164,7 +164,7 @@ def get_reviews():
 @app.route("/nexmo",methods=["GET"])
 def get_nexmo():
     client = nexmo.Client(key='78ca5126', secret='6hnzpSo1P0U6vPvt')
-    client.send_message({'from': '17402240276', 'to': '14087310723', 'text': 'New Listing near you in Mountain View, CA! "Lifeguard" for $15/hr '})
+    client.send_message({'from': '17402240276', 'to': '14087310723', 'text': 'New Listing near you in Mountain View, CA! "Lifeguard" for $15/hr....click this link to apply: https://goo.gl/12j4ja8 '})
     return "Success"
 
 @app.route('/')
