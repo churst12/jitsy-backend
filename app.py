@@ -4,7 +4,7 @@ from flask_marshmallow import Marshmallow
 from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
-
+import nexmo
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///jitsy.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -92,6 +92,9 @@ def add_listing():
 
     db.session.add(new_listing)
     db.session.commit()
+
+    client = nexmo.Client(key='78ca5126', secret='6hnzpSo1P0U6vPvt')
+    client.send_message({'from': '17402240276', 'to': '14087310723', 'text': 'New Listing near you in {0} for the wage of: ${1}'.format(location,price)})
 
     return "201 Created Listing"
 
