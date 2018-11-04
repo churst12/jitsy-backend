@@ -161,6 +161,12 @@ def get_reviews():
     return jsonify(result.data)
 ##########
 
+@app.route("/nexmo",methods=["GET"])
+def get_nexmo():
+    client = nexmo.Client(key='78ca5126', secret='6hnzpSo1P0U6vPvt')
+    client.send_message({'from': '17402240276', 'to': '14087310723', 'text': 'New Listing near you in Mountain View, CA! "Lifeguard" for $15/hr '})
+    return "Success"
+
 @app.route('/')
 def home():
     return "jitsy"
