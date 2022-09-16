@@ -19,7 +19,7 @@ ipaddress==1.0.22
 itsdangerous==1.1.0
 Jinja2==2.10
 jsonify==0.5
-Mako==1.0.7
+Mako==1.2.2
 MarkupSafe==1.0
 marshmallow==2.16.3
 marshmallow-sqlalchemy==0.14.2
